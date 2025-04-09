@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http:www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo Application</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+  <style>
+    :root {
+      --app-bg: #f8fafc;
+      --card-bg: #ffffff;
+      --primary: #0ea5e9;
+      --primary-hover: #0284c7;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --text-primary: #0f172a;
+      --text-secondary: #64748b;
+      --border-radius: 12px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--app-bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 20px 0;
+    }
+
+    .container {
+      max-width: 700px;
+      padding: 0 16px;
+    }
+
+    .todo-app-header {
+      font-weight: 600;
+      font-size: 1.75rem;
+      margin-bottom: 2rem;
+      color: var(--text-primary);
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .input-wrapper {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 24px;
+    }
+
+    .input-control {
+      background-color: var(--app-bg);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      height: auto;
+    }
+
+    .input-control:focus {
+      box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+      border-color: var(--primary);
+    }
+
+    .btn-add {
+      background-color: var(--primary);
+      border: none;
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: white;
+      transition: all 0.2s ease;
+      height: 100%;
+    }
+
+    .btn-add:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .task-item {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+      border-left: 4px solid var(--primary);
+    }
+
+    .task-item:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .task-item.completed {
+      border-left-color: var(--text-secondary);
+      opacity: 0.8;
+    }
+
+    .task-text {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .text-strikethrough {
+      text-decoration: line-through;
+      color: var(--text-secondary);
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-toggle {
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .btn-toggle:hover {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-delete {
+      background-color: transparent;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .btn-delete:hover {
+      background-color: var(--danger);
+      color: white;
+    }
+
+    .empty-list {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 40px 24px;
+      text-align: center;
+      color: var(--text-secondary);
+      box-shadow: var(--shadow-sm);
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .btn-add {
+        width: 100%;
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 class="todo-app-header">Tasks</h1>
+
+  <div class="input-wrapper">
+    <form action="/" method="post" class="row g-3">
+      <div class="col-lg-9 col-md-8 col-sm-12">
+        <input class="form-control input-control" type="text" name="name" placeholder="Add a new task..." required>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-12">
+        <button type="submit" class="btn btn-add w-100">Add task</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="task-list">
+    <th:block th:each="task : ${tasks}">
+      <div class="task-item" th:classappend="${task.completed} ? 'completed'">
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="task-text" th:classappend="${task.completed} ? 'text-strikethrough'" th:text="${task.name}">Task Title</span>
+
+          <div class="task-actions">
+            <a th:href="@{/{id}/toggle(id=${task.id})}" class="btn btn-toggle">
+              <span th:if="${task.completed}">Undo</span>
+              <span th:unless="${task.completed}">Done</span>
+            </a>
+            <a th:href="@{/{id}/delete(id=${task.id})}" class="btn btn-delete">Delete</a>
+          </div>
+        </div>
+      </div>
+    </th:block>
+
+    <div class="empty-list" th:if="${#lists.isEmpty(tasks)}">
+      No tasks yet. Add one to get started!
+    </div>
+  </div>
+</div>
+</body>
+</html>
